@@ -1,0 +1,12 @@
+groups:
+  - name: ticketebi_alerts
+    rules:
+      - alert: HighErrorRate
+        # Fires when errors exceed 5 per minute
+        expr: rate(app_errors_total_total[1m]) * 60 > 5
+        for: 0m
+        labels:
+          severity: CRITICAL
+        annotations:
+          summary: "Error rate exceeded 5 per minute"
+          description: "Current rate: {{ $value | printf \"%.2f\" }} errors/min"

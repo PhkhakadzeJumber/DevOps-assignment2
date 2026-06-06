@@ -1,0 +1,17 @@
+services:
+  app:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+
+    working_dir: /app
+
+    volumes:
+      - ./backend:/app
+      - ~/.m2:/root/.m2
+
+    command: mvn spring-boot:run
+
+    ports:
+      - "8080:8080"
+      - "5005:5005"

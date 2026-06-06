@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+:root {
+  --primaryDark: #161b33;
+  --secondaryDark: #374151;
+  --primaryRed: #ba2b2b;
+}
+
+@theme inline {
+  --font-size-base: 16px;
+  --font-size-lg: 18px;
+  --font-size-sm: 14px;
+  --font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --color-PrimaryDark: var(--primaryDark);
+  --color-SecondaryDark: var(--secondaryDark);
+  --color-primaryRed: var(--primaryRed);
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}

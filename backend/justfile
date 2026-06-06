@@ -1,0 +1,52 @@
+set shell := ["powershell.exe", "-c"]
+
+# Default command: help lists commands
+default: help
+
+# Lists all available commands with their descriptions.
+help:
+    @just --list
+
+# --== Development Environment (with Hot Reload) ==--
+# Starts the services using docker-compose.override.yml for hot reloading.
+# Usage:
+#   just dev        - Starts in the foreground (attached).
+#   just dev detached - Starts in the background (detached).
+dev *args:
+    @echo "Starting development environment with hot reload..."
+    docker-compose up --build {{args}}
+
+# --== Production Environment ==--
+# Starts the services using ONLY the main docker-compose.yml, simulating production.
+# This will run the pre-built JAR file inside the container.
+# Usage:
+#   just prod         - Starts in the foreground (attached).
+#   just prod detached  - Starts in the background (detached).
+prod *args:
+    @echo "Starting production-like environment..."
+    docker-compose -f docker-compose.yml up --build {{args}}
+
+# --== Utility Commands ==--
+
+# Stops and removes all running containers, networks, and volumes.
+down:
+    @echo "Stopping and removing containers..."
+    docker-compose down
+
+# Follows the logs of all running services.
+logs:
+    @echo "Following container logs..."
+    docker-compose logs -f app
+
+# just db        - Starts psql shell
+db:
+    @echo "Starting psql shell for tickets db..."
+    docker exec -it ticket-platform-db psql -U postgres -d tickets
+
+# Cleans the Maven build directory to prevent "ghost" class file issues.
+clean:
+    @echo "Cleaning Maven target directory..."
+    mvn clean
+
+# A convenient alias to rebuild and restart the dev environment from a clean slate.
+restart: clean dev

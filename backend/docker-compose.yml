@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:14-alpine
+    container_name: ticket-platform-db
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+    container_name: ticket-platform-app
+    ports:
+      - "8080:8080"
+      - "5005:5005"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${DB_NAME}
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: none
+      JWT_SECRET: ${JWT_SECRET}
+      QR_SECRET: ${QR_SECRET}
+      APP_EMAIL: ${APP_EMAIL}
+      APP_PASSWORD: ${APP_PASSWORD}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      APP_OAUTH2_REDIRECT_URL: ${APP_OAUTH2_REDIRECT_URL}
+    volumes:
+      - ./uploads:/app/uploads
+    # Production runs JAR
+    command: java -jar /app/app.jar
+
+volumes:
+  postgres-data:
