@@ -2,8 +2,7 @@ groups:
   - name: ticketebi_alerts
     rules:
       - alert: HighErrorRate
-        # Fires when errors exceed 5 per minute
-        expr: rate(app_errors_total_total[1m]) * 60 > 5
+        expr: rate(app_errors_total[1m]) * 60 > 5
         for: 0m
         labels:
           severity: CRITICAL

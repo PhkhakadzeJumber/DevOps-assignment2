@@ -52,6 +52,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // public endpoints
                         .requestMatchers("/actuator/**").permitAll()
+                        .requestMatchers("/api/status/**").permitAll()
                         .requestMatchers(PublicEndpointsConfig.PUBLIC_ENDPOINTS).permitAll()
                         .requestMatchers(HttpMethod.GET,
                                 "/api/categories/**",

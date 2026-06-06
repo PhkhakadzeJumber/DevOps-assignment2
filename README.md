@@ -58,6 +58,17 @@ Logs are written to stdout in JSON format using `logstash-logback-encoder`. Each
 
 Promtail reads Docker container log files from `/var/lib/docker/containers/`, unwraps Docker's outer JSON envelope, and parses the inner application JSON to extract `level` as a Loki label for filtering.
 
+## Evidence
+
+### Grafana Dashboard
+![Grafana Dashboard](docs/grafana-dashboard.png)
+
+### Loki Logs
+![Loki Logs](docs/loki-logs.png)
+
+### Prometheus Alert Firing
+![Alert Firing](docs/prometheus-alert.png)
+
 ## Analysis
 
 **Why is JSON-structured logging more efficient than plain text?**
